@@ -1,3 +1,3 @@
-# Pandorykey & Pandory Jailbreak
+# Pandorykey/Native
 
 This is the source code for the additional pandorytool files that run natively on a Pandora android system.
