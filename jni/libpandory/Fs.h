@@ -13,6 +13,7 @@ public:
 
     static int filesize(std::string src);
     static int copy(std::string source, std::string destination);
+    static int move(const std::string& source, const std::string& destination);
 
     static std::string extension(const std::string &file);
 

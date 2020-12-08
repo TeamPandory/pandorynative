@@ -14,6 +14,7 @@
 #include "../../libpandory/Environment.h"
 #include "../../libpandory/Fs.h"
 #include "../../libpandory/Process.h"
+#include "../../libpandory/FsMounter.h"
 
 class PandoryKey {
 protected:
@@ -29,6 +30,7 @@ protected:
     ShellEnabler shellEnabler;
     Environment environment;
     Fs fs;
+    FsMounter fsMounter;
     Process process;
 public:
     int main();

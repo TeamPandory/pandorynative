@@ -1,3 +1,4 @@
+#include <iostream>
 #include "MoorechipJailbreak.h"
 #include "../../../libpandory/Fs.h"
 #include "JailbreakAbstract.h"
@@ -17,11 +18,41 @@ bool MoorechipJailbreak::copyFiles()
     Fs::copy("pandory/meta.bin", "/data/meta.bin");
     Fs::copy("pandory/res.bin", "/data/res.bin");
     Fs::copy("pandory/pandory.sh", "/system/bin/pandory.sh");
+    process.exec("rm -f /data/system/users/0/package-restrictions.xml");
     if (environment.isRetrostationFirmware()) {
         Fs::copy("pandory/package-restrictions-retrostation.xml", "/data/system/users/0/package-restrictions.xml");
     } else {
         Fs::copy("pandory/package-restrictions-moorechip.xml", "/data/system/users/0/package-restrictions.xml");
     }
+
+    // copy updated savestate config
+    Fs::copy("pandory/batch_update_game_support_features.txt", "/storage/external_storage/sdcard1/games/batch_update_game_support_features.txt");
+    Fs::copy("pandory/batch_update_game_support_features.txt", "/storage/external_storage/sda1/games/batch_update_game_support_features.txt");
+    Fs::copy("pandory/batch_update_game_support_features.txt", "/data/edata/games/batch_update_game_support_features.txt");
+    process.exec("chmod 777 /data/edata/games/batch_update_game_support_features.txt");
+
+    // Enable Dreamcast Saving!
+    Fs::copy("pandory/dc.tgz", "/cache/dc.tgz");
+    process.exec("mkdir -p /data/pandorydata/dc/");
+    process.exec("busybox-armv7l tar xvf /cache/dc.tgz -C /data/pandorydata/dc/");
+    process.exec("rm -f /cache/dc.tgz");
+
+    // Fix playstation bios .. and tekken!
+    if (environment.isRetrostationFirmware()) {
+        // blindly copy bios to the correct folder
+        Fs::makeDirectory("/storage/external_storage/sdcard1/games/data/common/family/");
+        Fs::makeDirectory("/storage/external_storage/sda1/games/data/common/family/");
+        Fs::copy("/storage/external_storage/sdcard1/games/data/family/tk3/scph5501.bin", "/storage/external_storage/sdcard1/games/data/common/family/scph5501.bin");
+        Fs::copy("/storage/external_storage/sda1/games/data/family/tk3/scph5501.bin", "/storage/external_storage/sda1/games/data/common/family/scph5501.bin");
+
+        Fs::move("/storage/external_storage/sdcard1/games/data/family/tk/5004599.ccd", "/storage/external_storage/sdcard1/games/data/family/tk/tk.ccd");
+        Fs::move("/storage/external_storage/sdcard1/games/data/family/tk/5004599.img", "/storage/external_storage/sdcard1/games/data/family/tk/tk.img");
+        Fs::move("/storage/external_storage/sdcard1/games/data/family/tk/5004599.sub", "/storage/external_storage/sdcard1/games/data/family/tk/tk.sub");
+        Fs::move("/storage/external_storage/sda1/games/data/family/tk/5004599.ccd", "/storage/external_storage/sda1/games/data/family/tk/tk.ccd");
+        Fs::move("/storage/external_storage/sda1/games/data/family/tk/5004599.img", "/storage/external_storage/sda1/games/data/family/tk/tk.img");
+        Fs::move("/storage/external_storage/sda1/games/data/family/tk/5004599.sub", "/storage/external_storage/sda1/games/data/family/tk/tk.sub");
+    }
+
     process.exec("chown system:system /data/system/users/0/package-restrictions.xml");
 
     if (!Fs::exists("/data/mtdblock0.img")) {
@@ -30,7 +61,6 @@ bool MoorechipJailbreak::copyFiles()
     if (!Fs::exists("/data/mtdblock1.img")) {
         dd.copy("/dev/block/mtdblock1", "/data/mtdblock1.img");
     }
-    
     return true;
 }
 
@@ -68,9 +98,7 @@ bool MoorechipJailbreak::setPermissions()
     androidFilesystem.setPermissions("/system/bin/dig", 755);
     androidFilesystem.setPermissions("/system/bin/pandory.sh", 755);
     androidFilesystem.setPermissions("/system/bin/pandorykey", 755);
-    androidFilesystem.setPermissions("/system/bin/adb", 755);
     androidFilesystem.setOwner("/system/bin/dig", "root:shell");
-    androidFilesystem.setOwner("/system/bin/adb", "root:shell");
     androidFilesystem.setOwner("/system/bin/pandory.sh", "root:shell");
     androidFilesystem.setOwner("/system/bin/pandorykey", "root:shell");
     JailbreakAbstract::setPermissions();

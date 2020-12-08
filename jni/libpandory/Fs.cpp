@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <iostream>
 #include "Fs.h"
+#include "Process.h"
 
 bool Fs::exists(const std::string& file) {
     struct stat buffer{};
@@ -55,7 +56,7 @@ std::string Fs::extension(const std::string &file) {
 
 int Fs::copy(std::string source, std::string destination)
 {
-	std::cout << "Copying " + source + " to " + destination;
+	std::cout << "Copying " + source + " to " + destination << std::endl;
 #ifdef __MINGW32__
     // Windows users... get forked!
     std::string cmd = "copy /Y \"" + winSlashes(source + "\" " + destination + " > NUL");
@@ -63,6 +64,7 @@ int Fs::copy(std::string source, std::string destination)
 #else
     // filesystem is a bit missing in the ndk
     std::string cmd = "cp -f \"" + source + "\" \"" + destination + "\"";
+    std::cout << "CMD: " << cmd << std::endl;
     system(cmd.c_str());
 #endif
     return 0; // this is fine
@@ -95,4 +97,10 @@ int Fs::copyRecursive(const std::filesystem::path &src, const std::filesystem::p
 
 int Fs::filesize(std::string src) {
     return std::filesystem::file_size(src.c_str());
+}
+
+int Fs::move(const std::string& source, const std::string& destination) {
+    Process process;
+    process.exec("mv "+source+" "+destination);
+    return 0;
 }

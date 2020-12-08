@@ -43,7 +43,6 @@ bool JailbreakAbstract::copyBranding()
 
 bool JailbreakAbstract::setPermissions()
 {
-    androidFilesystem.setOwner("/data/bin/pandorykey", "root:shell");
     androidFilesystem.setPermissions("/system/bin/busybox-armv7l", 755);
     androidFilesystem.setOwner("/system/bin/busybox-armv7l", "root:shell");
     return true;

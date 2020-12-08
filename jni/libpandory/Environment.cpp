@@ -9,12 +9,8 @@ bool Environment::isTrimUiFirmware() {
     return Fs::exists("/system/priv-app/RxMAME4droid/MAME4droid.apk");
 }
 
-bool Environment::isMoorechipRecoveryMode() {
-    return true; //TODO;
-    //return Fs::exists("/system/priv-app/RxMAME4droid/MAME4droid.apk");
-}
 bool Environment::isRetrostationFirmware() {
-	return Fs::exists("/data/data/com.retrostation.gameplayer/shared_prefs/com.retrostation.gameplayer_preferences.xml");
+	return Fs::exists("/data/data/com.retrostation.gameplayer/shared_prefs/multidex.version.xml");
 }
 
 std::string Environment::get34Ratio() {

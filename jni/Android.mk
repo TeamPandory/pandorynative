@@ -38,6 +38,7 @@ LOCAL_SRC_FILES :=  pandorykey/src/main.cpp \
                     libpandory/ResolutionSwitcher.cpp \
                     libpandory/PandoraController.cpp \
                     libpandory/Android.cpp \
+                    libpandory/FsMounter.cpp \
                     libpandory/VideoDebricker.cpp \
                     libpandory/Process.cpp \
                     libpandory/ShellEnabler.cpp \

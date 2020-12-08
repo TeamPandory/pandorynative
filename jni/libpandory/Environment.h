@@ -11,7 +11,6 @@ public:
     bool isMoorechipFirmware();
     bool isRetrostationFirmware();
     bool isTrimUiFirmware();
-    bool isMoorechipRecoveryMode();
 };
 
 

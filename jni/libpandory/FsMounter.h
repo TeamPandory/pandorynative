@@ -11,6 +11,7 @@ protected:
 public:
     bool mount(const std::string &device, const std::string &mountPoint);
     bool unmount(const std::string &device);
+    bool bindMount(const std::string &device, const std::string &mountPoint);
 };
 
 #endif //PANDORYJAILBREAK_FSMOUNTER_H

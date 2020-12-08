@@ -19,6 +19,10 @@ int PandoryKey::main() {
     	}
     }
 
+    if (Fs::exists("/data/pandorydata/dc/emu.cfg")) {
+        fsMounter.bindMount("/data/pandorydata/dc/", "/system/vendor/games/dc/");
+    }
+
     shellEnabler.enableTelnet();
 
     if (jailbreak.isUltimate()) {
@@ -98,7 +102,7 @@ int PandoryKey::main() {
 
             std::size_t keyPause = lineInput.find("fpga2key key: 8, press: 1");
             std::size_t keyPauseReleased = lineInput.find("fpga2key key: 8, press: 0");
-            if (keyPauseReleased != std::string::npos) thub{
+            if (keyPauseReleased != std::string::npos) {
                 pauseDown = false;
                 pauseUpTime = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(pauseUpTime - pauseDownTime);
@@ -130,7 +134,7 @@ int PandoryKey::main() {
                         if (mode == 0) {
                             android.startActivity("com.benny.openlauncher", "com.benny.openlauncher.activity.HomeActivity");
                             mode = 1;
-                        } else {
+                        } else if (mode == 1){
                         	if (environment.isRetrostationFirmware()) {
 								android.startActivity("com.retrostation.gamemenu",
 													  "com.retrostation.gamemenu.activity.MenuActivity");
@@ -138,6 +142,12 @@ int PandoryKey::main() {
 								android.startActivity("com.moorechip.gamemenu",
 													  "com.moorechip.gamemenu.activity.MenuActivity");
                         	}
+                        	mode = 0;
+                        	if (Fs::exists("/data/data/com.retroarch.ra32/lib/libretroarch-activity.so")) {
+                        	    mode = 2;
+                        	}
+                        } else if (mode == 2) {
+                            android.startActivity("com.retroarch.ra32", "com.retroarch.browser.mainmenu.MainMenuActivity");
                             mode = 0;
                         }
                         pause = 0;

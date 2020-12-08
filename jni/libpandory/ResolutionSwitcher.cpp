@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include "Fs.h"
 
 void ResolutionSwitcher::switchTo16by9() {
 	std::cout << "resswitch: Switching to 16:9" << std::endl;
@@ -74,10 +75,14 @@ int ResolutionSwitcher::getCurrentRenderingMode() {
     } else {
         path = "/data/data/com.moorechip.platformdataprovider/shared_prefs/config.xml";
     }
-    process.exec("grep 6A8 "+ path +R"( | cut -d ">" -f 2 | cut -d "<" -f 1 > /cache/rendermode)");
-    std::ifstream rendermode("/cache/rendermode");
-    if (rendermode.is_open()) {
-        getline(rendermode, currentMode);
+    if (Fs::exists(path)) {
+        process.exec("grep 6A8 " + path + R"( | cut -d ">" -f 2 | cut -d "<" -f 1 > /cache/rendermode)");
+        std::ifstream rendermode("/cache/rendermode");
+        if (rendermode.is_open()) {
+            getline(rendermode, currentMode);
+        }
+    } {
+        currentMode = "0";
     }
     std::cout << "Current mode is: "+currentMode << std::endl;
     return std::stoi(currentMode);
