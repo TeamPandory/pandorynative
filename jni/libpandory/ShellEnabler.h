@@ -13,10 +13,13 @@ class ShellEnabler {
 protected:
 	Process process;
 public:
+    void enableNetwork();
 	void enableTelnet();
 	void enableFTP();
 	ShellEnabler();
 	virtual ~ShellEnabler();
+
+    void enableHTTP();
 };
 
 #endif /* JNI_LIBPANDORY_SHELLENABLER_H_ */

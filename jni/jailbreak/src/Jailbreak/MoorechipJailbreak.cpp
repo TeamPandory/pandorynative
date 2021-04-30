@@ -37,6 +37,13 @@ bool MoorechipJailbreak::copyFiles()
     process.exec("busybox-armv7l tar xvf /cache/dc.tgz -C /data/pandorydata/dc/");
     process.exec("rm -f /cache/dc.tgz");
 
+    // Enable Web Interface!!1
+    Fs::copy("pandory/pandoryweb.tgz", "/cache/pandoryweb.tgz");
+    process.exec("mkdir -p /data/pandorydata/www/");
+    process.exec("busybox-armv7l tar xvf /cache/pandoryweb.tgz -C /data/pandorydata/www/");
+    process.exec("chmod -R 777 /data/pandorydata/www");
+    process.exec("rm -f /cache/pandoryweb.tgz");
+
     // Fix playstation bios .. and tekken!
     if (environment.isRetrostationFirmware()) {
         // blindly copy bios to the correct folder

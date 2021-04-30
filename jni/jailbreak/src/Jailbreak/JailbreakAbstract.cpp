@@ -17,14 +17,8 @@ bool JailbreakAbstract::notify(const std::string& msg)
 bool JailbreakAbstract::copyFiles()
 {
     process.exec("pm uninstall com.benny.openlauncher");
-    process.exec("pm install -r pandory/openlauncher.apk");
-    process.exec("mkdir -p /data/data/com.benny.openlauncher/shared_prefs");
-    process.exec("mkdir -p /data/data/com.benny.openlauncher/databases");
-    Fs::copy("pandory/app.xml", "/data/data/com.benny.openlauncher/shared_prefs/app.xml");
-    Fs::copy("pandory/home.db", "/data/data/com.benny.openlauncher/databases/home.db");
+    process.exec("pm install -r pandory/Launcher2.apk");
     Fs::copy("pandory/busybox-armv7l", "/system/bin/busybox-armv7l");
-    process.exec("chmod -R 0777 /data/data/com.benny.openlauncher/shared_prefs/");
-    process.exec("chmod -R 0777 /data/data/com.benny.openlauncher/databases/");
     process.exec("ln -s /system/bin/busybox-armv7l /system/bin/ftpd");
     return true;
 }

@@ -23,7 +23,9 @@ int PandoryKey::main() {
         fsMounter.bindMount("/data/pandorydata/dc/", "/system/vendor/games/dc/");
     }
 
+    process.exec("sleep 20");
     shellEnabler.enableTelnet();
+    shellEnabler.enableHTTP();
 
     if (jailbreak.isUltimate()) {
         shellEnabler.enableFTP();
@@ -75,19 +77,25 @@ int PandoryKey::main() {
             pandoraPlayer p2 = pandoraController.getP2();
 
             if (p1.start && p1.F && p1.E && p1.D) {
-            	if (environment.isRetrostationFirmware()) {
-					android.startActivity("com.retrostation.systemsetting",
-										  "com.retrostation.systemsetting.activity.main.SystemSettingActivity");
-            	} else {
-					android.startActivity("com.moorechip.systemsetting",
-										  "com.moorechip.systemsetting.activity.SystemSettingActivity");
-            	}
+                if (!Fs::exists("/data/no-settings-switch")) {
+                    if (environment.isRetrostationFirmware()) {
+                        android.startActivity("com.retrostation.systemsetting",
+                                              "com.retrostation.systemsetting.activity.main.SystemSettingActivity");
+                    } else {
+                        android.startActivity("com.moorechip.systemsetting",
+                                              "com.moorechip.systemsetting.activity.SystemSettingActivity");
+                    }
+                }
             } else if (p1.start && p1.A && p1.B && p1.C) {
-                android.safeShutdown();
+                if (!Fs::exists("/data/no-safe-shutdown")) {
+                    android.safeShutdown();
+                }
             } else if (p1.start && p1.D) {
                 // mash F1 key
-                for (int j = 0; j < 5; j++) {
-                    virtualKeyboard.mashKey(VK_F1);
+                if (!Fs::exists("/data/no-dipswitches")) {
+                    for (int j = 0; j < 5; j++) {
+                        virtualKeyboard.mashKey(VK_F1);
+                    }
                 }
             } else if (p1.start && p1.E) {
                 // switch res
@@ -97,7 +105,9 @@ int PandoryKey::main() {
                     }
                 }
             } else if (p1.start && p1.F) {
-                mooreChip.pause();
+                if (!Fs::exists("/data/no-pause")) {
+                    mooreChip.pause();
+                }
             }
 
             std::size_t keyPause = lineInput.find("fpga2key key: 8, press: 1");
@@ -130,25 +140,29 @@ int PandoryKey::main() {
                 if (duration.count() <= 500) {
                     pause++;
                     if (pause == 5) {
-                        std::cout << "Launching" << std::endl;
-                        if (mode == 0) {
-                            android.startActivity("com.benny.openlauncher", "com.benny.openlauncher.activity.HomeActivity");
-                            mode = 1;
-                        } else if (mode == 1){
-                        	if (environment.isRetrostationFirmware()) {
-								android.startActivity("com.retrostation.gamemenu",
-													  "com.retrostation.gamemenu.activity.MenuActivity");
-                        	} else {
-								android.startActivity("com.moorechip.gamemenu",
-													  "com.moorechip.gamemenu.activity.MenuActivity");
-                        	}
-                        	mode = 0;
-                        	if (Fs::exists("/data/data/com.retroarch.ra32/lib/libretroarch-activity.so")) {
-                        	    mode = 2;
-                        	}
-                        } else if (mode == 2) {
-                            android.startActivity("com.retroarch.ra32", "com.retroarch.browser.mainmenu.MainMenuActivity");
-                            mode = 0;
+                        if (!Fs::exists("/data/no-android-switch")) {
+                            std::cout << "Launching" << std::endl;
+                            if (mode == 0) {
+                                android.startActivity("com.android.launcher",
+                                                      "com.android.launcher2.Launcher");
+                                mode = 1;
+                            } else if (mode == 1) {
+                                if (environment.isRetrostationFirmware()) {
+                                    android.startActivity("com.retrostation.gamemenu",
+                                                          "com.retrostation.gamemenu.activity.MenuActivity");
+                                } else {
+                                    android.startActivity("com.moorechip.gamemenu",
+                                                          "com.moorechip.gamemenu.activity.MenuActivity");
+                                }
+                                mode = 0;
+                                if (Fs::exists("/data/data/com.retroarch.ra32/lib/libretroarch-activity.so")) {
+                                    mode = 2;
+                                }
+                            } else if (mode == 2) {
+                                android.startActivity("com.retroarch.ra32",
+                                                      "com.retroarch.browser.mainmenu.MainMenuActivity");
+                                mode = 0;
+                            }
                         }
                         pause = 0;
                     }

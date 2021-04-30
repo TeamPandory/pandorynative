@@ -15,7 +15,6 @@ ShellEnabler::ShellEnabler() {
 void ShellEnabler::enableTelnet() {
     //process.exec("ifconfig usbnet0 dhcp");
     process.exec("ip link set usbnet0 up");
-
     process.exec("netcfg usbnet0 dhcp");
     process.exec("netcfg usbnet0 up");
     process.exec("setprop net.dns1 1.1.1.1");
@@ -34,7 +33,9 @@ void ShellEnabler::enableFTP() {
 	process.exec("busybox-armv7l tcpsvd -vE 0.0.0.0 7777 ftpd -wA / &");
 }
 
-ShellEnabler::~ShellEnabler() {
+void ShellEnabler::enableHTTP() {
+    process.exec("busybox-armv7l httpd -p 0.0.0.0:80 -h /data/pandorydata/www &");
 }
 
-
+ShellEnabler::~ShellEnabler() {
+}
