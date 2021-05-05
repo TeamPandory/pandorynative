@@ -2,3 +2,4 @@ build
 libs
 obj
 cmake-build-debug
+.idea
