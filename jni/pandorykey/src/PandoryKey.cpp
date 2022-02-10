@@ -86,7 +86,12 @@ int PandoryKey::main() {
                                               "com.moorechip.systemsetting.activity.SystemSettingActivity");
                     }
                 }
-            } else if (p1.start && p1.A && p1.B && p1.C) {
+            } else if (p1.coin) {
+                if (Fs::exists("/data/coin-to-pause")) {
+                    mooreChip.pause();
+                }
+            }
+            else if (p1.start && p1.A && p1.B && p1.C) {
                 if (!Fs::exists("/data/no-safe-shutdown")) {
                     android.safeShutdown();
                 }

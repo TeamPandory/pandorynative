@@ -18,6 +18,8 @@ void PandoraController::updateState(const std::string &lineInput) {
 	std::size_t p1FRelease = lineInput.find("fpga2key key: 40, press: 0");
 	std::size_t p1StartPress = lineInput.find("fpga2key key: 9, press: 1");
 	std::size_t p1StartRelease = lineInput.find("fpga2key key: 9, press: 0");
+    std::size_t p1CoinPress = lineInput.find("fpga2key key: 10, press: 1");
+    std::size_t p1CoinRelease = lineInput.find("fpga2key key: 10, press: 0");
 	std::size_t keyPause = lineInput.find("fpga2key key: 8, press: 1");
 	std::size_t keyPauseReleased = lineInput.find("fpga2key key: 8, press: 0");
 
@@ -35,6 +37,9 @@ void PandoraController::updateState(const std::string &lineInput) {
     if (p1FRelease != std::string::npos) p1.F = false;
     if (p1StartPress != std::string::npos) p1.start = true;
     if (p1StartRelease != std::string::npos) p1.start = false;
+    if (p1CoinPress != std::string::npos) p1.coin = true;
+    if (p1CoinRelease != std::string::npos) p1.coin = false;
+
     if (keyPause != std::string::npos) p2.coin = true;
     if (keyPauseReleased != std::string::npos) p2.coin = false;
 }
