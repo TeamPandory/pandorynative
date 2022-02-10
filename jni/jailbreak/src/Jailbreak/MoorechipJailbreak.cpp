@@ -86,13 +86,21 @@ bool MoorechipJailbreak::copyBranding()
         Fs::copy("pandory/skin/logo.png", "/sdcard/skin/logo.png");
         process.exec("chmod -R 777 /data/edata/skin/");
 
+        if (Fs::exists("/storage/external_storage/sdcard1")) {
+            process.exec("mkdir -p /storage/external_storage/sdcard1/skin/backup");
+            process.exec("mv /storage/external_storage/sdcard1/skin/*.png /data/media/0/skin/backup/");
+            Fs::copy("pandory/skin/background.png", "/storage/external_storage/sdcard1/skin/background.png");
+            Fs::copy("pandory/skin/loading.png", "/storage/external_storage/sdcard1/skin/loading.png");
+            Fs::copy("pandory/skin/logo.png", "/storage/external_storage/sdcard1/skin/logo.png");
+            process.exec("chmod -R 777 /storage/external_storage/sdcard1/skin/");
+        }
+
         if (Fs::exists("/data/edata")) {
             Fs::makeDirectory("/data/edata/skin");
             Fs::copy("pandory/skin/background.png", "/data/edata/skin/background.png");
             Fs::copy("pandory/skin/loading.png", "/data/edata/skin/loading.png");
             Fs::copy("pandory/skin/logo.png", "/data/edata/skin/logo.png");
             process.exec("chmod -R 777 /data/edata/skin/");
-
         }
     }
     JailbreakAbstract::copyBranding();
